@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook: auto-runs ktlintFormat on staged Kotlin files and re-stages
+# the formatted versions before the commit proceeds.
+#
+# To enable:   git config core.hooksPath .githooks
+# To bypass:   git commit --no-verify   (discouraged — fix the underlying issue)
+
+set -e
+
+# Collect staged Kotlin / Kotlin-script files (added, copied, or modified only).
+staged_kt=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.kts?$' || true)
+
+if [ -z "$staged_kt" ]; then
+    exit 0
+fi
+
+echo "[pre-commit] Running ktlintFormat on staged Kotlin files…"
+
+# ktlintFormat operates on the whole project rather than individual files.
+# Run quietly; fail the commit if formatting itself errors out.
+if ! ./gradlew --quiet ktlintFormat; then
+    echo "[pre-commit] ktlintFormat failed. Fix the errors above and retry." >&2
+    exit 1
+fi
+
+# Re-stage any files that ktlintFormat rewrote.
+while IFS= read -r file; do
+    if [ -f "$file" ]; then
+        git add "$file"
+    fi
+done <<< "$staged_kt"
+
+exit 0

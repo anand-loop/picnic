@@ -1,0 +1,37 @@
+# Built outputs
+/build/
+**/build/
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Android Studio / IntelliJ
+*.iml
+.idea/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services
+google-services.json
+
+# Navigation editor temp files
+.navigation/
+
+# Generated files
+gen/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code (per-user)
+.claude/settings.local.json
+.claude/worktrees/

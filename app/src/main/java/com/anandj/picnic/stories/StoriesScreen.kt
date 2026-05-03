@@ -1,0 +1,158 @@
+// Copyright (C) 2026 Anand Jesudason
+// SPDX-License-Identifier: Apache-2.0
+
+@file:OptIn(androidx.compose.animation.ExperimentalSharedTransitionApi::class)
+
+package com.anandj.picnic.stories
+
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.anandj.picnic.R
+import com.anandj.picnic.ui.PicnicTopAppBar
+
+@Composable
+private fun EmptyStoriesState(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(32.dp),
+        horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_stories),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(48.dp)
+        )
+        Text(
+            text = "No stories",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = "Your Instagram export doesn't contain any stories.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StoriesScreen(
+    viewModel: StoriesViewModel,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    scrollBehavior: TopAppBarScrollBehavior,
+    columns: Int = 2
+) {
+    val state by viewModel.state.collectAsState()
+    val gridState = rememberLazyGridState()
+
+    val isLoadingMoreRef = rememberUpdatedState(state.isLoadingMore)
+    val endReachedRef = rememberUpdatedState(state.endReached)
+    val onLoadMore = rememberUpdatedState { viewModel.sendAction(StoriesContract.Action.LoadMore) }
+
+    LaunchedEffect(gridState) {
+        snapshotFlow {
+            val info = gridState.layoutInfo
+            info.visibleItemsInfo.lastOrNull()?.index to info.totalItemsCount
+        }.collect { (lastIndex, total) ->
+            if (lastIndex != null && lastIndex >= total - 18 &&
+                !isLoadingMoreRef.value && !endReachedRef.value
+            ) {
+                onLoadMore.value()
+            }
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            PicnicTopAppBar(
+                onSettingsClick = { viewModel.sendAction(StoriesContract.Action.OpenSettings) },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+        ) {
+            when {
+                state.isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+
+                state.items.isEmpty() -> {
+                    EmptyStoriesState(modifier = Modifier.align(Alignment.Center))
+                }
+
+                else -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(columns),
+                        state = gridState,
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(state.items, key = { it.dayKey }) { group ->
+                            StoryGridCell(
+                                item = group,
+                                onClick = { viewModel.sendAction(StoriesContract.Action.OpenGroup(group.dayKey)) },
+                                sharedTransitionScope = sharedTransitionScope,
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                        }
+                        if (state.isLoadingMore) {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
