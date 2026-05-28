@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,7 +72,7 @@ fun ExpandableText(
         if (overflows && !expanded) {
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = "Show more",
+                contentDescription = stringResource(R.string.bento_show_more),
                 modifier =
                     Modifier
                         .padding(top = 4.dp)

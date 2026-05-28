@@ -38,7 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.anandj.picnic.R
 import com.anandj.picnic.data.DataManagementViewModel
 import com.anandj.picnic.data.repository.ImportState
 import com.anandj.picnic.ui.theme.ThemePreference
@@ -59,10 +61,10 @@ fun SettingsScreen(viewModel: DataManagementViewModel, onNavigateBack: () -> Uni
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") },
+                title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -85,8 +87,8 @@ fun SettingsScreen(viewModel: DataManagementViewModel, onNavigateBack: () -> Uni
                 )
                 HorizontalDivider()
                 SettingsItem(
-                    title = "Clear data",
-                    subtitle = "Remove all imported data",
+                    title = stringResource(R.string.settings_clear_data),
+                    subtitle = stringResource(R.string.settings_clear_data_subtitle),
                     enabled = importState !is ImportState.InProgress,
                     onClick = { showClearConfirm = true }
                 )
@@ -110,7 +112,7 @@ fun SettingsScreen(viewModel: DataManagementViewModel, onNavigateBack: () -> Uni
 
                 if (importState is ImportState.Error) {
                     Text(
-                        text = "Error: ${(importState as ImportState.Error).cause}",
+                        text = stringResource(R.string.settings_import_error, (importState as ImportState.Error).cause),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(16.dp)
@@ -123,16 +125,16 @@ fun SettingsScreen(viewModel: DataManagementViewModel, onNavigateBack: () -> Uni
     if (showClearConfirm) {
         AlertDialog(
             onDismissRequest = { showClearConfirm = false },
-            title = { Text("Clear data") },
-            text = { Text("This will remove all imported data. Are you sure?") },
+            title = { Text(stringResource(R.string.settings_clear_data)) },
+            text = { Text(stringResource(R.string.settings_clear_data_message)) },
             confirmButton = {
                 TextButton(onClick = {
                     showClearConfirm = false
                     viewModel.clearData()
-                }) { Text("Clear") }
+                }) { Text(stringResource(R.string.action_clear)) }
             },
             dismissButton = {
-                TextButton(onClick = { showClearConfirm = false }) { Text("Cancel") }
+                TextButton(onClick = { showClearConfirm = false }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }
@@ -142,7 +144,7 @@ fun SettingsScreen(viewModel: DataManagementViewModel, onNavigateBack: () -> Uni
 @Composable
 private fun ThemeSettingsItem(current: ThemePreference, onSelect: (ThemePreference) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp)) {
-        Text("Theme", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(10.dp))
         SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
             ThemePreference.entries.forEachIndexed { index, pref ->
@@ -162,7 +164,7 @@ private fun ThemeSettingsItem(current: ThemePreference, onSelect: (ThemePreferen
 private fun GridColumnsSettingsItem(current: Int, onSelect: (Int) -> Unit) {
     val options = listOf(1, 2, 3)
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp)) {
-        Text("Grid columns", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        Text(stringResource(R.string.settings_grid_columns), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(10.dp))
         SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
             options.forEachIndexed { index, columns ->

@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
@@ -112,7 +113,7 @@ fun ReelDetailScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.action_back),
                     tint = White
                 )
             }
@@ -125,7 +126,7 @@ fun ReelDetailScreen(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_share),
-                    contentDescription = "Share",
+                    contentDescription = stringResource(R.string.action_share),
                     tint = White
                 )
             }

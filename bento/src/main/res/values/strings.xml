@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bento_show_more">Show more</string>
+    <string name="bento_error_title">Oops! Something went wrong</string>
+    <string name="bento_retry">Retry</string>
+</resources>

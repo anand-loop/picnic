@@ -20,4 +20,10 @@ interface ConnectionDao {
 
     @Query("SELECT * FROM connections WHERE type = 'following' ORDER BY timestamp DESC")
     fun getFollowing(): Flow<List<ConnectionEntity>>
+
+    @Query("SELECT * FROM connections WHERE type = :type ORDER BY timestamp DESC LIMIT :limit OFFSET :offset")
+    suspend fun getPage(type: String, limit: Int, offset: Int): List<ConnectionEntity>
+
+    @Query("SELECT COUNT(*) FROM connections WHERE type = :type")
+    suspend fun getCount(type: String): Int
 }

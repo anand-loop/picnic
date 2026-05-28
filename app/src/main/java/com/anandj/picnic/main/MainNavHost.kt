@@ -26,6 +26,8 @@ import com.anandj.picnic.data.DataManagementViewModel
 import com.anandj.picnic.feed.FeedContract
 import com.anandj.picnic.feed.FeedViewModel
 import com.anandj.picnic.import.ImportScreen
+import com.anandj.picnic.people.PeopleContract
+import com.anandj.picnic.people.PeopleViewModel
 import com.anandj.picnic.post.PostScreen
 import com.anandj.picnic.post.PostViewModel
 import com.anandj.picnic.reels.ReelDetailScreen
@@ -44,6 +46,7 @@ fun MainNavHost(startDestination: String) {
     val feedViewModel: FeedViewModel = hiltViewModel()
     val reelsViewModel: ReelsViewModel = hiltViewModel()
     val storiesViewModel: StoriesViewModel = hiltViewModel()
+    val peopleViewModel: PeopleViewModel = hiltViewModel()
     val dataViewModel: DataManagementViewModel = hiltViewModel()
     val gridColumns by dataViewModel.gridColumns.collectAsState()
 
@@ -74,6 +77,14 @@ fun MainNavHost(startDestination: String) {
         }
     }
 
+    LaunchedEffect(Unit) {
+        peopleViewModel.effects.collect { effect ->
+            when (effect) {
+                PeopleContract.Effect.NavigateToSettings -> navController.navigate(Routes.SETTINGS)
+            }
+        }
+    }
+
     SharedTransitionLayout {
         NavHost(
             navController = navController,
@@ -96,6 +107,7 @@ fun MainNavHost(startDestination: String) {
                         feedViewModel.sendAction(FeedContract.Action.Reload)
                         reelsViewModel.sendAction(ReelsContract.Action.Reload)
                         storiesViewModel.sendAction(StoriesContract.Action.Reload)
+                        peopleViewModel.sendAction(PeopleContract.Action.Reload)
                         navController.navigate(Routes.FEED) {
                             popUpTo(Routes.IMPORT) { inclusive = true }
                         }
@@ -112,6 +124,7 @@ fun MainNavHost(startDestination: String) {
                     feedViewModel = feedViewModel,
                     reelsViewModel = reelsViewModel,
                     storiesViewModel = storiesViewModel,
+                    peopleViewModel = peopleViewModel,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,
                     columns = gridColumns

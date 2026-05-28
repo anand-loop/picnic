@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -297,7 +298,7 @@ private fun PaginationErrorView(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.error,
         )
-        Button(onClick = onRetry) { Text("Retry") }
+        Button(onClick = onRetry) { Text(stringResource(R.string.bento_retry)) }
     }
 }
 
@@ -312,7 +313,7 @@ private fun ErrorView(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Oops! Something went wrong",
+            text = stringResource(R.string.bento_error_title),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
         )
@@ -323,7 +324,7 @@ private fun ErrorView(
             modifier = Modifier.padding(top = 8.dp),
         )
         Button(onClick = onRetry, modifier = Modifier.padding(top = 16.dp)) {
-            Text("Retry")
+            Text(stringResource(R.string.bento_retry))
         }
     }
 }

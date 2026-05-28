@@ -4,6 +4,7 @@
 package com.anandj.picnic.feed
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -26,13 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.anandj.picnic.R
 
-enum class NavTab(@DrawableRes val iconRes: Int) {
-    POSTS(R.drawable.ic_posts),
-    REELS(R.drawable.ic_reels),
-    STORIES(R.drawable.ic_stories)
+enum class NavTab(@DrawableRes val iconRes: Int, @StringRes val labelRes: Int) {
+    POSTS(R.drawable.ic_posts, R.string.nav_posts),
+    REELS(R.drawable.ic_reels, R.string.nav_reels),
+    STORIES(R.drawable.ic_stories, R.string.nav_stories),
+    PEOPLE(R.drawable.ic_people, R.string.nav_people)
 }
 
 private val BarShape = RoundedCornerShape(32.dp)
@@ -91,7 +94,7 @@ private fun NavBarItem(tab: NavTab, selected: Boolean, onClick: () -> Unit) {
     ) {
         Icon(
             painter = painterResource(tab.iconRes),
-            contentDescription = tab.name,
+            contentDescription = stringResource(tab.labelRes),
             tint = iconColor,
             modifier = Modifier.size(24.dp)
         )

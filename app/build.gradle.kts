@@ -68,8 +68,6 @@ dependencies {
     implementation(libs.coil.video)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
-    implementation(libs.lottie)
-    implementation(libs.lottie.compose)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)

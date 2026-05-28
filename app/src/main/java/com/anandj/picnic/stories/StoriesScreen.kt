@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.anandj.picnic.R
 import com.anandj.picnic.ui.PicnicTopAppBar
@@ -58,12 +59,12 @@ private fun EmptyStoriesState(modifier: Modifier = Modifier) {
             modifier = Modifier.size(48.dp)
         )
         Text(
-            text = "No stories",
+            text = stringResource(R.string.stories_empty_title),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Your Instagram export doesn't contain any stories.",
+            text = stringResource(R.string.stories_empty_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

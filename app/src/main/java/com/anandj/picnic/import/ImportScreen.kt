@@ -10,21 +10,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.anandj.picnic.R
 import com.anandj.picnic.data.repository.ImportState
 import com.anandj.picnic.ui.theme.Black
 import com.anandj.picnic.ui.theme.BrandTitleStyle
@@ -32,12 +29,6 @@ import com.anandj.picnic.ui.theme.BrandTitleStyle
 @Composable
 fun ImportScreen(importState: ImportState, onImportClick: () -> Unit, onGoToFeedClick: () -> Unit) {
     val isLoading = importState is ImportState.InProgress
-    val composition by rememberLottieComposition(LottieCompositionSpec.Asset("loading_dots.json"))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        isPlaying = isLoading,
-        iterations = LottieConstants.IterateForever
-    )
 
     Box(
         modifier = Modifier
@@ -49,22 +40,22 @@ fun ImportScreen(importState: ImportState, onImportClick: () -> Unit, onGoToFeed
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Picnic",
+                text = stringResource(R.string.app_name),
                 style = BrandTitleStyle.copy(fontSize = 32.sp)
             )
 
             if (isLoading) {
-                Spacer(Modifier.height(8.dp))
-                LottieAnimation(
-                    composition = composition,
-                    progress = { progress },
-                    modifier = Modifier.size(120.dp)
-                )
+                Spacer(Modifier.height(16.dp))
+                CircularProgressIndicator()
             }
 
             val statusText = when (importState) {
                 is ImportState.InProgress -> importState.message
-                is ImportState.Done -> "${importState.posts} posts imported"
+                is ImportState.Done -> pluralStringResource(
+                    R.plurals.import_posts_imported,
+                    importState.posts,
+                    importState.posts
+                )
                 is ImportState.Error -> importState.cause
                 else -> null
             }
@@ -80,8 +71,8 @@ fun ImportScreen(importState: ImportState, onImportClick: () -> Unit, onGoToFeed
         }
 
         val (buttonLabel, buttonAction) = when (importState) {
-            is ImportState.Done -> "Go To Feed" to onGoToFeedClick
-            else -> "Import Instagram ZIP" to onImportClick
+            is ImportState.Done -> stringResource(R.string.import_go_to_feed) to onGoToFeedClick
+            else -> stringResource(R.string.import_action) to onImportClick
         }
         Button(
             onClick = buttonAction,

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand / app name is not translated. -->
+    <string name="app_name" translatable="false">Picnic</string>
+
+    <!-- Common actions / content descriptions -->
+    <string name="action_back">Back</string>
+    <string name="action_share">Share</string>
+    <string name="action_close">Close</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_view_location">View location</string>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_grid_columns">Grid columns</string>
+    <string name="settings_clear_data">Clear data</string>
+    <string name="settings_clear_data_subtitle">Remove all imported data</string>
+    <string name="settings_clear_data_message">This will remove all imported data. Are you sure?</string>
+    <string name="settings_import_error">Error: %1$s</string>
+
+    <!-- Import screen -->
+    <string name="import_action">Import Instagram ZIP</string>
+    <string name="import_go_to_feed">Go To Feed</string>
+    <plurals name="import_posts_imported">
+        <item quantity="one">%1$d post imported</item>
+        <item quantity="other">%1$d posts imported</item>
+    </plurals>
+
+    <!-- Reels -->
+    <string name="reels_empty_title">No reels</string>
+    <string name="reels_empty_subtitle">Your Instagram export doesn\'t contain any reels.</string>
+
+    <!-- Stories -->
+    <string name="stories_empty_title">No stories</string>
+    <string name="stories_empty_subtitle">Your Instagram export doesn\'t contain any stories.</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_posts">Posts</string>
+    <string name="nav_reels">Reels</string>
+    <string name="nav_stories">Stories</string>
+    <string name="nav_people">People</string>
+
+    <!-- People (followers / following) -->
+    <string name="people_followers">Followers</string>
+    <string name="people_following">Following</string>
+    <string name="people_empty_followers">Your Instagram export doesn\'t contain any followers.</string>
+    <string name="people_empty_following">Your Instagram export doesn\'t list anyone you follow.</string>
+
+    <!-- Count badge overflow indicator (e.g. shown when a count is 10 or more) -->
+    <string name="count_badge_overflow">9+</string>
+</resources>

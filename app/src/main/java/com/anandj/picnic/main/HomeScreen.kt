@@ -25,6 +25,8 @@ import com.anandj.picnic.feed.FeedScreen
 import com.anandj.picnic.feed.FeedViewModel
 import com.anandj.picnic.feed.FloatingBottomNavBar
 import com.anandj.picnic.feed.NavTab
+import com.anandj.picnic.people.PeopleScreen
+import com.anandj.picnic.people.PeopleViewModel
 import com.anandj.picnic.reels.ReelsScreen
 import com.anandj.picnic.reels.ReelsViewModel
 import com.anandj.picnic.stories.StoriesScreen
@@ -36,6 +38,7 @@ fun HomeScreen(
     feedViewModel: FeedViewModel,
     reelsViewModel: ReelsViewModel,
     storiesViewModel: StoriesViewModel,
+    peopleViewModel: PeopleViewModel,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     columns: Int
@@ -65,6 +68,10 @@ fun HomeScreen(
                 animatedVisibilityScope = animatedVisibilityScope,
                 scrollBehavior = scrollBehavior,
                 columns = columns
+            )
+            NavTab.PEOPLE -> PeopleScreen(
+                viewModel = peopleViewModel,
+                scrollBehavior = scrollBehavior
             )
         }
 
