@@ -1,13 +1,8 @@
 // Copyright (C) 2026 Anand Jesudason
 // SPDX-License-Identifier: Apache-2.0
 
-@file:OptIn(androidx.compose.animation.ExperimentalSharedTransitionApi::class)
-
 package com.anandj.picnic.reels
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,9 +23,7 @@ import java.io.File
 @Composable
 internal fun ReelGridCell(
     item: ReelEntity,
-    onClick: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -39,36 +32,21 @@ internal fun ReelGridCell(
             .background(MaterialTheme.colorScheme.surface)
             .clickable(onClick = onClick)
     ) {
-        ReelCellImage(
-            uri = item.uri,
-            sharedTransitionScope = sharedTransitionScope,
-            animatedVisibilityScope = animatedVisibilityScope
-        )
+        ReelCellImage(uri = item.uri)
     }
 }
 
 @Composable
-private fun ReelCellImage(
-    uri: String,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
-) {
+private fun ReelCellImage(uri: String) {
     val context = LocalContext.current
     val request = ImageRequest.Builder(context)
         .data(File(uri))
         .crossfade(true)
         .build()
-    with(sharedTransitionScope) {
-        AsyncImage(
-            model = request,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .sharedElement(
-                    state = rememberSharedContentState(key = "reel-$uri"),
-                    animatedVisibilityScope = animatedVisibilityScope
-                )
-        )
-    }
+    AsyncImage(
+        model = request,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxSize()
+    )
 }

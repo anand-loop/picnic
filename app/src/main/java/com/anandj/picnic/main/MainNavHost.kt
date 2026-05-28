@@ -170,9 +170,7 @@ fun MainNavHost(startDestination: String) {
                 val reelDetailViewModel: ReelDetailViewModel = hiltViewModel()
                 ReelDetailScreen(
                     viewModel = reelDetailViewModel,
-                    onNavigateBack = { navController.popBackStack() },
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@composable
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 

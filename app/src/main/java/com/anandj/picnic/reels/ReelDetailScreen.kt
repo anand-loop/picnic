@@ -1,15 +1,11 @@
 // Copyright (C) 2026 Anand Jesudason
 // SPDX-License-Identifier: Apache-2.0
 
-@file:OptIn(androidx.compose.animation.ExperimentalSharedTransitionApi::class)
-
 package com.anandj.picnic.reels
 
 import android.net.Uri
+import android.view.LayoutInflater
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,9 +47,7 @@ import java.io.File
 @Composable
 fun ReelDetailScreen(
     viewModel: ReelDetailViewModel,
-    onNavigateBack: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -74,24 +68,16 @@ fun ReelDetailScreen(
         if (reel == null) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            // Thumbnail acts as the shared-element target — animates from the grid cell.
-            // The video player overlays it once prepared.
-            with(sharedTransitionScope) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(File(reel.uri))
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .sharedElement(
-                            state = rememberSharedContentState(key = "reel-${reel.uri}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-                )
-            }
+            // Poster frame shown until the video player is prepared, then overlaid by it.
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(File(reel.uri))
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize()
+            )
             ReelVideoPlayer(
                 uri = reel.uri,
                 initialPositionMs = viewModel.playbackPositionMs,
@@ -161,7 +147,10 @@ private fun ReelVideoPlayer(
     }
 
     AndroidView(
-        factory = { ctx -> PlayerView(ctx).apply { this.player = exoPlayer } },
+        factory = { ctx ->
+            LayoutInflater.from(ctx).inflate(R.layout.reel_player_view, null) as PlayerView
+        },
+        update = { view -> view.player = exoPlayer },
         modifier = modifier
     )
 }

@@ -1,13 +1,8 @@
 // Copyright (C) 2026 Anand Jesudason
 // SPDX-License-Identifier: Apache-2.0
 
-@file:OptIn(androidx.compose.animation.ExperimentalSharedTransitionApi::class)
-
 package com.anandj.picnic.reels
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -75,8 +70,6 @@ private fun EmptyReelsState(modifier: Modifier = Modifier) {
 @Composable
 fun ReelsScreen(
     viewModel: ReelsViewModel,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
     scrollBehavior: TopAppBarScrollBehavior,
     columns: Int = 2
 ) {
@@ -134,9 +127,7 @@ fun ReelsScreen(
                         items(state.items, key = { it.id }) { reel ->
                             ReelGridCell(
                                 item = reel,
-                                onClick = { viewModel.sendAction(ReelsContract.Action.OpenReel(reel.id)) },
-                                sharedTransitionScope = sharedTransitionScope,
-                                animatedVisibilityScope = animatedVisibilityScope
+                                onClick = { viewModel.sendAction(ReelsContract.Action.OpenReel(reel.id)) }
                             )
                         }
                         if (state.isLoadingMore) {

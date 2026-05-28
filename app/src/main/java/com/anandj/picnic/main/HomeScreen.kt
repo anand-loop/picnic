@@ -57,8 +57,6 @@ fun HomeScreen(
             )
             NavTab.REELS -> ReelsScreen(
                 viewModel = reelsViewModel,
-                sharedTransitionScope = sharedTransitionScope,
-                animatedVisibilityScope = animatedVisibilityScope,
                 scrollBehavior = scrollBehavior,
                 columns = columns
             )
