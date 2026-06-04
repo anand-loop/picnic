@@ -16,6 +16,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -24,6 +25,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -141,6 +144,7 @@ private fun MediaImagePage(
         model = file,
         contentDescription = null,
         contentScale = ContentScale.Fit,
+        placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
         modifier = sizeModifier
             .aspectRatio(1f)
             .then(navSharedElementModifier)
@@ -268,8 +272,15 @@ private fun MediaVideoPlayer(uri: String, isActive: Boolean, modifier: Modifier 
         onDispose { player.release() }
     }
 
+    // Gray shutter shown until the first video frame is rendered (default is black).
+    val shutterColor = MaterialTheme.colorScheme.surfaceVariant.toArgb()
     AndroidView(
-        factory = { ctx -> PlayerView(ctx).apply { this.player = player } },
+        factory = { ctx ->
+            PlayerView(ctx).apply {
+                this.player = player
+                setShutterBackgroundColor(shutterColor)
+            }
+        },
         modifier = modifier
     )
 }

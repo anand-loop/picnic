@@ -29,7 +29,7 @@ internal fun ReelGridCell(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(2.dp)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable(onClick = onClick)
     ) {
         ReelCellImage(uri = item.uri)
