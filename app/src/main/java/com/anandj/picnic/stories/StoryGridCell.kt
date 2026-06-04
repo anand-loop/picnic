@@ -38,7 +38,7 @@ internal fun StoryGridCell(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(2.dp)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable(onClick = onClick)
     ) {
         StoryCellImage(
